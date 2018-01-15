@@ -31,6 +31,8 @@ func NewIndex(playlist, dir string) (*Index, error) {
 	index.PageData.file = dir + "/" + playlist + ".json"
 
 	f, err := os.OpenFile(index.PageData.file, os.O_RDWR|os.O_CREATE, 0755)
+	defer f.Close()
+
 	if err != nil {
 		return nil, err
 	}
