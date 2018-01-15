@@ -2,11 +2,11 @@
 
 我经常看一些youtube的视频，有一些精彩的时常要下载下来，这个工具实现了在看视频时候轻点鼠标就可以自动下载, 如下面两个截图
 
-<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164257@2x.png" width="400">
+<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164257@2x.png">
 
 
 
-<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164419@2x.png" width="400">
+<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164419@2x.png">
 
 #### 支持环境
 
@@ -22,15 +22,15 @@ Mac 和 Linux
 
    * 在[谷歌开发者终端](https://console.developers.google.com/)，先创建一个project然后在这个project里创建一个“oauth api”的credential, 
 
-   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-1614422x.png" width="400">
+   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-1614422x.png">
 
    * 在credential列表里找到刚创建的credential，点击打开它，然后点"download json"下载验证文件, 保存为"client_secret.json" ，下载程序运行时要用
 
-     <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-162651@2x.png" width="400">
+     <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-162651@2x.png">
 
    * 然后在“Library”里激活 ”youtube data api"
 
-   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-161628@2x.png" width="400">
+   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-161628@2x.png"https://github.com/zhanghjster/youtube-downloader.git>
 
    * 登录youtube账号后，在任何一个视频右下角下面点击“+”的那个按钮创建一个“playlist”
 
