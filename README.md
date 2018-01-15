@@ -2,11 +2,11 @@
 
 我经常看一些youtube的视频，有一些精彩的时常要下载下来，这个工具实现了在看视频时候轻点鼠标就可以自动下载, 如下面两个截图
 
-<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-171401a.png">
+<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-171401a.png" width="400">
 
 
 
-<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164419@2x.png">
+<img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164419@2x.png" width="400">
 
 #### 支持环境
 
