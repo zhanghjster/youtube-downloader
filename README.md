@@ -30,7 +30,7 @@ Mac 和 Linux
 
    * 然后在“Library”里激活 ”youtube data api"
 
-   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-161628@2x.png"https://github.com/zhanghjster/youtube-downloader.git>
+   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-161628@2x.png">
 
    * 登录youtube账号后，在任何一个视频右下角下面点击“+”的那个按钮创建一个“playlist”
 
