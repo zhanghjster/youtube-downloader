@@ -22,7 +22,7 @@ Mac 和 Linux
 
    * 在[谷歌开发者终端](https://console.developers.google.com/)，先创建一个project然后在这个project里创建一个“oauth api”的credential, 
 
-   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-1614422x.png">
+   <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-171638@2x.png">
 
    * 在credential列表里找到刚创建的credential，点击打开它，然后点"download json"下载验证文件, 保存为"client_secret.json" ，下载程序运行时要用
 
