@@ -1,10 +1,12 @@
 #### 简介
 
-我经常看一些youtube的视频，有一些精彩的时常要下载下来，这个工具实现了在看视频时候轻点鼠标就可以自动下载, 如下面两个截图
+这是一个懒人下载器，让你在看到精彩的youtube视频时候轻点鼠标就会有后台程序自动下载，过程如下
+
+看到视频时候点击视频右下角的按钮添加到一个playlist
 
 <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-171401a.png" width="400">
 
-
+下载器自动下载
 
 <img src="http://owo5nif4b.bkt.clouddn.com/QQ20180115-164419@2x.png" width="400">
 
@@ -14,7 +16,7 @@ Mac 和 Linux
 
 #### 使用方法
 
-1. 下载youtube-downloader
+1. [下载](https://github.com/zhanghjster/youtube-downloader/releases) youtube-downloader
 
 2. 安装you-get https://you-get.org
 
