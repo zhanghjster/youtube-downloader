@@ -3,26 +3,19 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"net"
+	"net/http"
 	"os"
-
 	"os/exec"
 	"time"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/net/context"
+	"golang.org/x/net/proxy"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/youtube/v3"
 
-	"net"
-
-	"net/http"
-
-	"bufio"
-
-	"sync/atomic"
-
 	log "github.com/sirupsen/logrus"
-	"golang.org/x/net/proxy"
 )
 
 var (
@@ -32,7 +25,7 @@ var (
 	secret     string
 	sockProxy  string
 	interval   int
-	concurrent int32
+	concurrent int
 )
 
 var RootCmd *cobra.Command
@@ -42,6 +35,7 @@ func init() {
 		FullTimestamp:   true,
 		TimestampFormat: "2006-01-02 15:04:05.00",
 	})
+
 	RootCmd = &cobra.Command{
 		Use: "youtube-downloader",
 		Run: cmdRunner,
@@ -53,7 +47,7 @@ func init() {
 	RootCmd.Flags().StringVar(&secret, "secret", "client_secret.json", "secret file")
 	RootCmd.Flags().StringVar(&sockProxy, "sock-proxy", "", "HOST:PORT socket proxy")
 	RootCmd.Flags().IntVar(&interval, "interval", 10, "interval of playlist check")
-	RootCmd.Flags().Int32Var(&concurrent, "concurrent", 1, "concurrency count")
+	RootCmd.Flags().IntVar(&concurrent, "concurrent", 1, "concurrency count")
 }
 
 func cmdRunner(cmd *cobra.Command, args []string) {
@@ -101,21 +95,18 @@ func cmdRunner(cmd *cobra.Command, args []string) {
 	call = call.PlaylistId(playlist)
 
 	var ids = make(chan string)
-	var curJobs int32
-	go func() {
-		for {
-			videoId := <-ids
-			for curJobs >= concurrent {
-			}
-			atomic.AddInt32(&curJobs, 1)
+	for i := 0; i < concurrent; i++ {
+		go func(id int) {
+			log.Info("start downloader ", id)
 
-			go func() {
-				defer atomic.AddInt32(&curJobs, -1)
+			for {
+				videoId := <-ids
+
 				if idx.VideoIsDownloaded(videoId) {
-					return
+					continue
 				}
 
-				log.Info("start download ", videoId)
+				log.Info("start download video ", videoId)
 
 				var args = []string{
 					"https://www.youtube.com/watch?v=" + videoId,
@@ -127,25 +118,19 @@ func cmdRunner(cmd *cobra.Command, args []string) {
 				}
 
 				cmd := exec.Command("you-get", args...)
-				cmdReader, err := cmd.StdoutPipe()
+				cmdOut, err := cmd.StdoutPipe()
 				if err != nil {
 					log.Error(err)
-					return
+					continue
 				}
 
-				scanner := bufio.NewScanner(cmdReader)
-				scanner.Split(bufio.ScanRunes)
-				go func() {
-					for scanner.Scan() {
-						if concurrent < 2 {
-							fmt.Print(scanner.Text())
-						}
-					}
-				}()
+				if concurrent < 2 {
+					go ScanAndPrint(cmdOut)
+				}
 
 				if err = cmd.Start(); err != nil {
 					log.Error(err)
-					return
+					continue
 				}
 
 				cmd.Wait()
@@ -153,26 +138,26 @@ func cmdRunner(cmd *cobra.Command, args []string) {
 				if err := idx.SetVideoDownloaded(videoId); err != nil {
 					log.Infof("save %s video flag fail\n", videoId)
 				}
-			}()
-		}
-	}()
+			}
+		}(i)
+	}
 
 	for {
 		if idx.PageData.PageToken != "" {
 			call = call.PageToken(idx.PageData.PageToken)
 		}
 
-		response, err := call.Do()
+		resp, err := call.Do()
 		if err != nil {
 			log.Error(err)
 		}
 
-		for _, item := range response.Items {
+		for _, item := range resp.Items {
 			ids <- item.ContentDetails.VideoId
 		}
 
-		if response.NextPageToken != "" {
-			idx.UpdatePageToken(response.NextPageToken)
+		if resp.NextPageToken != "" {
+			idx.UpdatePageToken(resp.NextPageToken)
 		}
 
 		time.Sleep(time.Duration(interval) * time.Second)

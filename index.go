@@ -18,8 +18,7 @@ type Index struct {
 }
 
 func NewIndex(playlist, dir string) (*Index, error) {
-	err := createDirIfNotExist(dir + "/" + playlist)
-	if err != nil {
+	if err := createDirIfNotExist(dir + "/" + playlist); err != nil {
 		return nil, err
 	}
 
@@ -30,31 +29,29 @@ func NewIndex(playlist, dir string) (*Index, error) {
 
 	index.PageData.file = dir + "/" + playlist + ".json"
 
-	f, err := os.OpenFile(index.PageData.file, os.O_RDWR|os.O_CREATE, 0755)
-	defer f.Close()
-
+	f, err := os.OpenFile(
+		index.PageData.file, os.O_RDWR|os.O_CREATE, 0755,
+	)
 	if err != nil {
 		return nil, err
 	}
 
 	json.NewDecoder(f).Decode(&index.PageData)
+	defer f.Close()
 
 	return index, nil
 }
 
-func (i *Index) videoFlag(videoId string) string {
+func (i *Index) videoFlagFile(videoId string) string {
 	return i.Dir + "/" + i.Playlist + "/" + videoId
 
 }
 func (i *Index) VideoIsDownloaded(videoId string) bool {
-	if _, err := os.Stat(i.videoFlag(videoId)); os.IsNotExist(err) {
-		return false
-	} else {
-		return true
-	}
+	_, err := os.Stat(i.videoFlagFile(videoId))
+	return !os.IsNotExist(err)
 }
 func (i *Index) SetVideoDownloaded(videoId string) error {
-	_, err := os.Create(i.videoFlag(videoId))
+	_, err := os.Create(i.videoFlagFile(videoId))
 	return err
 }
 
@@ -66,7 +63,8 @@ func (i *Index) UpdatePageToken(token string) error {
 func (i *Index) FlushPageData() error {
 	b, err := json.Marshal(i.PageData)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
 	return ioutil.WriteFile(i.PageData.file, b, 0755)
 }

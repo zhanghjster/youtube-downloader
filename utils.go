@@ -3,6 +3,10 @@ package main
 import (
 	"os"
 
+	"bufio"
+	"fmt"
+	"io"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,4 +25,12 @@ func createDirIfNotExist(dir string) error {
 	}
 
 	return nil
+}
+
+func ScanAndPrint(r io.Reader) {
+	scanner := bufio.NewScanner(r)
+	scanner.Split(bufio.ScanRunes)
+	for scanner.Scan() {
+		fmt.Print(scanner.Text())
+	}
 }
