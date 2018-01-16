@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type Index struct {

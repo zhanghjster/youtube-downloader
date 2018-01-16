@@ -1,0 +1,23 @@
+.PHONY: docker darwin linux
+
+docker: linux
+
+    @echo build docker
+    @docker build -t zhanghjster/youtube-downloader
+
+linux:
+
+    @echo build linux tar ball
+    @GOOS=linux go build
+    @tar zcvf youtube-downloader.linux-amd64.tar.gz youtube-downloader
+
+darwin:
+
+    @echo build darwin tar ball
+    @GOOS=darwin go build
+    @tar zcvf youtube-downloader.darwin-amd64.tar.gz youtube-downloader
+
+clean:
+
+    @rm -f youtube-downloader
+    @rm -f *tar.gz
