@@ -28,7 +28,7 @@ var (
 	concurrent int
 )
 
-var RootCmd *cobra.Command
+var Cmd *cobra.Command
 
 func init() {
 	log.SetFormatter(&log.TextFormatter{
@@ -36,18 +36,18 @@ func init() {
 		TimestampFormat: "2006-01-02 15:04:05.00",
 	})
 
-	RootCmd = &cobra.Command{
+	Cmd = &cobra.Command{
 		Use: "youtube-downloader",
 		Run: cmdRunner,
 	}
 
-	RootCmd.Flags().StringVarP(&playlist, "playlist", "p", "", "playlist id ")
-	RootCmd.Flags().StringVar(&videoDir, "video-dir", "video", "[video] Dir for downloaded video")
-	RootCmd.Flags().StringVar(&indexDir, "index-dir", ".index", "[.index] Dir for index")
-	RootCmd.Flags().StringVar(&secret, "secret", "client_secret.json", "secret file")
-	RootCmd.Flags().StringVar(&sockProxy, "sock-proxy", "", "HOST:PORT socket proxy")
-	RootCmd.Flags().IntVar(&interval, "interval", 10, "interval of playlist check")
-	RootCmd.Flags().IntVar(&concurrent, "concurrent", 1, "concurrency count")
+	Cmd.Flags().StringVarP(&playlist, "playlist", "p", "", "playlist id ")
+	Cmd.Flags().StringVar(&videoDir, "video-dir", "video", "[video] Dir for downloaded video")
+	Cmd.Flags().StringVar(&indexDir, "index-dir", ".index", "[.index] Dir for index")
+	Cmd.Flags().StringVar(&secret, "secret", "client_secret.json", "secret file")
+	Cmd.Flags().StringVar(&sockProxy, "sock-proxy", "", "HOST:PORT socket proxy")
+	Cmd.Flags().IntVar(&interval, "interval", 10, "interval of playlist check")
+	Cmd.Flags().IntVar(&concurrent, "concurrent", 1, "concurrency count")
 }
 
 func cmdRunner(cmd *cobra.Command, args []string) {
@@ -165,6 +165,6 @@ func cmdRunner(cmd *cobra.Command, args []string) {
 }
 
 func main() {
-	err := RootCmd.Execute()
+	err := Cmd.Execute()
 	fatalErr(err)
 }
