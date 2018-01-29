@@ -15,6 +15,8 @@ import (
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/youtube/v3"
 
+	"path"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -24,6 +26,7 @@ var (
 	playlist   string
 	secret     string
 	sockProxy  string
+	archive    string
 	interval   int
 	concurrent int
 )
@@ -48,12 +51,20 @@ func init() {
 	Cmd.Flags().StringVar(&sockProxy, "sock-proxy", "", "HOST:PORT socket proxy")
 	Cmd.Flags().IntVar(&interval, "interval", 10, "interval of playlist check")
 	Cmd.Flags().IntVar(&concurrent, "concurrent", 1, "concurrency count")
+	Cmd.Flags().StringVar(&archive, "archive", "no", "[daily|monthly|no]video data sub-dir")
 }
 
 func cmdRunner(cmd *cobra.Command, args []string) {
 	if playlist == "" {
 		cmd.Usage()
 		os.Exit(0)
+	}
+
+	switch archive {
+	case "daily":
+		videoDir = path.Join(videoDir, time.Now().Format("20060102"))
+	case "monthly":
+		videoDir = path.Join(videoDir, time.Now().Format("200601"))
 	}
 
 	err := createDirIfNotExist(videoDir)
