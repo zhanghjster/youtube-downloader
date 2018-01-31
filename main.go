@@ -60,16 +60,6 @@ func cmdRunner(cmd *cobra.Command, args []string) {
 		os.Exit(0)
 	}
 
-	switch archive {
-	case "daily":
-		videoDir = path.Join(videoDir, time.Now().Format("20060102"))
-	case "monthly":
-		videoDir = path.Join(videoDir, time.Now().Format("200601"))
-	}
-
-	err := createDirIfNotExist(videoDir)
-	fatalErr(err)
-
 	idx, err := NewIndex(playlist, indexDir)
 	fatalErr(err)
 
@@ -119,9 +109,20 @@ func cmdRunner(cmd *cobra.Command, args []string) {
 
 				log.Info("start download video ", videoId)
 
+				var dir = videoDir
+				switch archive {
+				case "daily":
+					dir = path.Join(dir, time.Now().Format("20060102"))
+				case "monthly":
+					dir = path.Join(dir, time.Now().Format("200601"))
+				}
+
+				err := createDirIfNotExist(dir)
+				fatalErr(err)
+
 				var args = []string{
 					"https://www.youtube.com/watch?v=" + videoId,
-					fmt.Sprintf("-o%s", videoDir),
+					fmt.Sprintf("-o%s", dir),
 				}
 
 				if sockProxy != "" {
